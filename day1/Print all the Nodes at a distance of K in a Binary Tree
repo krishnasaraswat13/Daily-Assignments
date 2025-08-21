@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+import java.util.*;
+
+class Solution {
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        Map<TreeNode, TreeNode> parentMap = new HashMap<>();
+        buildParentMap(root, null, parentMap);
+
+        Queue<TreeNode> q = new LinkedList<>();
+        Set<TreeNode> visited = new HashSet<>();
+        q.offer(target);
+        visited.add(target);
+
+        int dist = 0;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            if (dist == k) break;
+
+            for (int i = 0; i < size; i++) {
+                TreeNode node = q.poll();
+                for (TreeNode nei : getNeighbors(node, parentMap)) {
+                    if (!visited.contains(nei)) {
+                        visited.add(nei);
+                        q.offer(nei);
+                    }
+                }
+            }
+            dist++;
+        }
+
+        List<Integer> result = new ArrayList<>();
+        while (!q.isEmpty()) {
+            result.add(q.poll().val);
+        }
+        return result;
+    }
+
+    private void buildParentMap(TreeNode node, TreeNode parent, Map<TreeNode, TreeNode> map) {
+        if (node == null) return;
+        if (parent != null) map.put(node, parent);
+        buildParentMap(node.left, node, map);
+        buildParentMap(node.right, node, map);
+    }
+
+    private List<TreeNode> getNeighbors(TreeNode node, Map<TreeNode, TreeNode> parentMap) {
+        List<TreeNode> neighbors = new ArrayList<>();
+        if (node.left != null) neighbors.add(node.left);
+        if (node.right != null) neighbors.add(node.right);
+        if (parentMap.containsKey(node)) neighbors.add(parentMap.get(node));
+        return neighbors;
+    }
+}
