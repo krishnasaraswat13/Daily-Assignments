@@ -1,0 +1,40 @@
+import java.util.*;
+
+class Solution {
+    public int reachableCells(int N, int M, int R, int C, int U, int D, char[][] mat) {
+        boolean[][] visited = new boolean[N][M];
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{R, C, U, D});
+        visited[R][C] = true;
+        int count = 0;
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int r = cur[0], c = cur[1], u = cur[2], d = cur[3];
+            count++;
+
+            // Up
+            if (r-1 >= 0 && mat[r-1][c] == '.' && u > 0 && !visited[r-1][c]) {
+                visited[r-1][c] = true;
+                q.offer(new int[]{r-1, c, u-1, d});
+            }
+            // Down
+            if (r+1 < N && mat[r+1][c] == '.' && d > 0 && !visited[r+1][c]) {
+                visited[r+1][c] = true;
+                q.offer(new int[]{r+1, c, u, d-1});
+            }
+            // Left
+            if (c-1 >= 0 && mat[r][c-1] == '.' && !visited[r][c-1]) {
+                visited[r][c-1] = true;
+                q.offer(new int[]{r, c-1, u, d});
+            }
+            // Right
+            if (c+1 < M && mat[r][c+1] == '.' && !visited[r][c+1]) {
+                visited[r][c+1] = true;
+                q.offer(new int[]{r, c+1, u, d});
+            }
+        }
+
+        return count;
+    }
+}
