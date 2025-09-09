@@ -1,0 +1,25 @@
+class Node {
+    int data;
+    Node left, right;
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class Solution {
+    public boolean isDeadEnd(Node root) {
+        return helper(root, 1, Integer.MAX_VALUE);
+    }
+
+    private boolean helper(Node root, int min, int max) {
+        if (root == null) return false;
+
+        // If no space left for insertion
+        if (min == max) return true;
+
+        // Check left and right subtrees
+        return helper(root.left, min, root.data - 1) ||
+               helper(root.right, root.data + 1, max);
+    }
+}

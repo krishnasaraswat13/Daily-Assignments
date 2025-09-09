@@ -1,0 +1,55 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class Solution {
+    public int countPairs(Node root1, Node root2, int x) {
+        if (root1 == null || root2 == null) return 0;
+
+        Stack<Node> s1 = new Stack<>();
+        Stack<Node> s2 = new Stack<>();
+
+        Node curr1 = root1, curr2 = root2;
+        int count = 0;
+
+        while (true) {
+            while (curr1 != null) {
+                s1.push(curr1);
+                curr1 = curr1.left;
+            }
+            while (curr2 != null) {
+                s2.push(curr2);
+                curr2 = curr2.right;
+            }
+
+            if (s1.isEmpty() || s2.isEmpty()) break;
+
+            Node top1 = s1.peek();
+            Node top2 = s2.peek();
+
+            int sum = top1.data + top2.data;
+
+            if (sum == x) {
+                count++;
+                s1.pop();
+                s2.pop();
+                curr1 = top1.right;
+                curr2 = top2.left;
+            } else if (sum < x) {
+                s1.pop();
+                curr1 = top1.right;
+            } else {
+                s2.pop();
+                curr2 = top2.left;
+            }
+        }
+        return count;
+    }
+}

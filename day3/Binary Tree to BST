@@ -1,0 +1,41 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class Solution {
+    private void storeInorder(Node root, ArrayList<Integer> vals) {
+        if (root == null) return;
+        storeInorder(root.left, vals);
+        vals.add(root.data);
+        storeInorder(root.right, vals);
+    }
+
+    private void arrayToBST(Node root, ArrayList<Integer> vals, int[] index) {
+        if (root == null) return;
+        arrayToBST(root.left, vals, index);
+        root.data = vals.get(index[0]++);
+        arrayToBST(root.right, vals, index);
+    }
+
+    Node binaryTreeToBST(Node root) {
+        ArrayList<Integer> vals = new ArrayList<>();
+        storeInorder(root, vals);
+        Collections.sort(vals);
+        arrayToBST(root, vals, new int[]{0});
+        return root;
+    }
+
+    void printInorder(Node root) {
+        if (root == null) return;
+        printInorder(root.left);
+        System.out.print(root.data + " ");
+        printInorder(root.right);
+    }
+}

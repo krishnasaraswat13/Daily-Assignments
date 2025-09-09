@@ -1,0 +1,27 @@
+class Node {
+    int data;
+    Node left, right;
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class Solution {
+    public int getCount(Node root, int l, int h) {
+        if (root == null) return 0;
+
+        // If current node is in range
+        if (root.data >= l && root.data <= h) {
+            return 1 + getCount(root.left, l, h) + getCount(root.right, l, h);
+        }
+        // If current node is smaller than l → ignore left subtree
+        else if (root.data < l) {
+            return getCount(root.right, l, h);
+        }
+        // If current node is greater than h → ignore right subtree
+        else {
+            return getCount(root.left, l, h);
+        }
+    }
+}

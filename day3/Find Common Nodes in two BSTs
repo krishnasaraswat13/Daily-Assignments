@@ -1,0 +1,40 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class Solution {
+    private void inorder(Node root, ArrayList<Integer> list) {
+        if (root == null) return;
+        inorder(root.left, list);
+        list.add(root.data);
+        inorder(root.right, list);
+    }
+
+    public ArrayList<Integer> findCommon(Node root1, Node root2) {
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        inorder(root1, list1);
+        inorder(root2, list2);
+
+        ArrayList<Integer> res = new ArrayList<>();
+        int i = 0, j = 0;
+        while (i < list1.size() && j < list2.size()) {
+            if (Objects.equals(list1.get(i), list2.get(j))) {
+                res.add(list1.get(i));
+                i++; j++;
+            } else if (list1.get(i) < list2.get(j)) {
+                i++;
+            } else {
+                j++;
+            }
+        }
+        return res;
+    }
+}
