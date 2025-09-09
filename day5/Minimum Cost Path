@@ -1,0 +1,43 @@
+import java.util.*;
+
+class Solution {
+    static class Cell {
+        int row, col, cost;
+        Cell(int r, int c, int cost) {
+            this.row = r;
+            this.col = c;
+            this.cost = cost;
+        }
+    }
+
+    public int minimumCostPath(int[][] grid) {
+        int n = grid.length;
+        int[][] dist = new int[n][n];
+        for (int[] d : dist) Arrays.fill(d, Integer.MAX_VALUE);
+
+        PriorityQueue<Cell> pq = new PriorityQueue<>((a, b) -> a.cost - b.cost);
+        pq.add(new Cell(0, 0, grid[0][0]));
+        dist[0][0] = grid[0][0];
+
+        int[][] dirs = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+        while (!pq.isEmpty()) {
+            Cell cur = pq.poll();
+            int r = cur.row, c = cur.col, cost = cur.cost;
+
+            if (r == n - 1 && c == n - 1) return cost;
+
+            for (int[] d : dirs) {
+                int nr = r + d[0], nc = c + d[1];
+                if (nr >= 0 && nr < n && nc >= 0 && nc < n) {
+                    int newCost = cost + grid[nr][nc];
+                    if (newCost < dist[nr][nc]) {
+                        dist[nr][nc] = newCost;
+                        pq.add(new Cell(nr, nc, newCost));
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}

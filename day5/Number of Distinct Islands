@@ -1,0 +1,29 @@
+class Solution {
+    int countDistinctIslands(int[][] grid) {
+        int n = grid.length, m = grid[0].length;
+        boolean[][] visited = new boolean[n][m];
+        Set<String> shapes = new HashSet<>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    StringBuilder sb = new StringBuilder();
+                    dfs(grid, visited, i, j, i, j, sb);
+                    shapes.add(sb.toString());
+                }
+            }
+        }
+        return shapes.size();
+    }
+
+    private void dfs(int[][] grid, boolean[][] visited, int r0, int c0, int r, int c, StringBuilder sb) {
+        int n = grid.length, m = grid[0].length;
+        if (r < 0 || r >= n || c < 0 || c >= m || visited[r][c] || grid[r][c] == 0) return;
+        visited[r][c] = true;
+        sb.append((r - r0) + ":" + (c - c0) + ",");
+        dfs(grid, visited, r0, c0, r + 1, c, sb);
+        dfs(grid, visited, r0, c0, r - 1, c, sb);
+        dfs(grid, visited, r0, c0, r, c + 1, sb);
+        dfs(grid, visited, r0, c0, r, c - 1, sb);
+    }
+}

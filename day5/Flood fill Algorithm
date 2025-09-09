@@ -1,0 +1,20 @@
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        int original = image[sr][sc];
+        if (original == newColor) return image;
+        dfs(image, sr, sc, newColor, original);
+        return image;
+    }
+
+    private void dfs(int[][] image, int r, int c, int newColor, int original) {
+        if (r < 0 || r >= image.length || c < 0 || c >= image[0].length) return;
+        if (image[r][c] != original) return;
+
+        image[r][c] = newColor;
+
+        dfs(image, r + 1, c, newColor, original);
+        dfs(image, r - 1, c, newColor, original);
+        dfs(image, r, c + 1, newColor, original);
+        dfs(image, r, c - 1, newColor, original);
+    }
+}
